@@ -1,45 +1,69 @@
 rm(list = ls())
 
-# test data
-S = matrix(rnorm(200, 0, 1), 10, 20)
-f = rnorm(10, 1, 1)
-
 
 # pointwise depth (one observation)
-obs_depth <- function(obs, set) {
-  diff = abs(sum(as.numeric(obs > set) - as.numeric(obs <= set)))
-  
-  return(1 - (diff/length(set)))
+obs_depth <- function(obs, vec) {
+  diff = abs(sum(as.numeric(obs > vec) - as.numeric(obs <= vec)))
+  depth = 1 - (diff / length(vec))
+  return(depth)
 }
 
 # pointwise depth (whole function)
-point_depth <- function(func, set) {
-  out = rep(0,length(func))
-  
-  for (row in 1:nrow(set)) {
-    out[row] = obs_depth(func, set[row,])
-  }
-  
-  return(out)
-}
+point_depth <- function(f, fmat) {
+  depth = rep(0, length(f))
 
-D = point_depth(f, S)
+  for (row in 1:nrow(fmat)) {
+    depth[row] = obs_depth(f[row], fmat[row,])
+  }
+  return(depth)
+}
 
 # depth CDF
 depth_CDF <- function(depths) {
-  depths.count = length(depths)
-  depths.set = seq(1, depths.count) / depths.count
-  
-  out = sapply(depths.set, function(x) sum(depths <= x) / depths.count)
-  return(out)
+  len = length(depths)
+  points = seq(1, len) / len
+
+  cdf = sapply(points, function(x) sum(depths <= x) / len)
+  return(cdf)
 }
 
-# compute the depth CDF for a set of functions (make into a function)
-pdepth = matrix(0, 10, 20)
-for (col in 1:ncol(S)) {
-  pdepth[,col] = point_depth(S[,col], S)
-  pdepth[,col] = depth_CDF(pdepth[,col])
+point_ED <- function(f_cdf, g_cdf) {
+  # returns 1 if f is more extreme and -1 if g is more extreme
+  for (x in 1:length(f_cdf)) {
+    diff = f_cdf[x] - g_cdf[x]
+    if (diff != 0.0) {
+      return(sign(diff))
+    }
+  }
+  # incase neither is more extreme
+  return(0)
 }
 
-Dcdf = depth_CDF(point_depth(f, S))
-plot(Dcdf)
+ED <- function(fmat) {
+  # find the depth CDF for each function
+  dCDF = matrix(0, nrow(fmat), ncol(fmat))
+  for (col in 1:ncol(fmat)) {
+    dCDF[,col] = point_depth(fmat[,col], fmat)
+    dCDF[,col] = depth_CDF(dCDF[,col])
+  }
+
+  # for each depth CDF (f1) count the number of depth CDFs (f2) that it's more extreme than
+  gt.vec = integer(0)
+  for (f1 in 1:ncol(dCDF)) {
+    gt = 0
+    for (f2 in 1:ncol(dCDF)) {
+      gt = gt + (point_ED(dCDF[,f1], dCDF[,f2]) > 0)
+    }
+    gt.vec = c(gt.vec, gt)
+  }
+
+  return(rev(order(gt.vec)))
+}
+
+# test data
+S = matrix(rnorm(10000, 0, 1), 1000, 10)
+S =
+ED(S)
+
+
+
