@@ -2,18 +2,18 @@ rm(list = ls())
 
 
 # pointwise depth (one observation)
-obs_depth <- function(obs, vec) {
-  diff = abs(sum(as.numeric(obs > vec) - as.numeric(obs <= vec)))
+point_depth <- function(obs, vec) {
+  diff = abs(sum(sign(obs - vec)))
   depth = 1 - (diff / length(vec))
   return(depth)
 }
 
 # pointwise depth (whole function)
-point_depth <- function(f, fmat) {
+depth <- function(f, fmat) {
   depth = rep(0, length(f))
 
   for (row in 1:nrow(fmat)) {
-    depth[row] = obs_depth(f[row], fmat[row,])
+    depth[row] = point_depth(f[row], fmat[row,])
   }
   return(depth)
 }
@@ -27,6 +27,7 @@ depth_CDF <- function(depths) {
   return(cdf)
 }
 
+# ED between two fuctions
 point_ED <- function(f_cdf, g_cdf) {
   # returns 1 if f is more extreme and -1 if g is more extreme
   for (x in 1:length(f_cdf)) {
@@ -43,8 +44,7 @@ ED <- function(fmat) {
   # find the depth CDF for each function
   dCDF = matrix(0, nrow(fmat), ncol(fmat))
   for (col in 1:ncol(fmat)) {
-    dCDF[,col] = point_depth(fmat[,col], fmat)
-    dCDF[,col] = depth_CDF(dCDF[,col])
+    dCDF[,col] = depth_CDF(depth(fmat[,col], fmat))
   }
 
   # for each depth CDF (f1) count the number of depth CDFs (f2) that it's more extreme than
@@ -61,9 +61,15 @@ ED <- function(fmat) {
 }
 
 # test data
-S = matrix(rnorm(10000, 0, 1), 1000, 10)
-S =
+n = 100
+S = matrix(rnorm(n*n, 0, 1), n, n)
+
+
+start.time <- Sys.time()
 ED(S)
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+time.taken
 
 
 
