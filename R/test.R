@@ -1,5 +1,8 @@
 rm(list = ls())
 
+source('R/depth.R')
+source('R/central_regions.R')
+
 # test data
 n = 500
 S = matrix(rnorm(n*n, 0, 1), n, n)
