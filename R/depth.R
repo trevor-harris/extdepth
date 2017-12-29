@@ -1,4 +1,4 @@
-rm(list = ls())
+# Depth Functions
 
 depth <- function(f, fmat) {
   # Computes the depth values of a function with respect to a set of functions (fmat)
@@ -61,19 +61,7 @@ ED <- function(fmat) {
     EDepth = c(EDepth, gt)
   }
 
-  return(rev(order(EDepth / nrow(fmat))))
+  return(EDepth / nrow(fmat))
 }
-
-# test data
-n = 10
-S = matrix(rnorm(n*n, 0, 1), n, n)
-
-
-start.time <- Sys.time()
-ED(S)
-end.time <- Sys.time()
-time.taken <- end.time - start.time
-time.taken
-
 
 
