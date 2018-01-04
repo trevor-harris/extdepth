@@ -1,5 +1,6 @@
 # Depth Functions
 
+#' @export
 depth <- function(f, fmat) {
   # Computes the depth values of a function with respect to a set of functions (fmat)
 
@@ -13,7 +14,7 @@ depth <- function(f, fmat) {
   return(depth)
 }
 
-
+#' @export
 depth_CDF <- function(f, fmat) {
   # Computes the depth CDF of a function with respect to a set of functions (fmat)
 
@@ -25,12 +26,13 @@ depth_CDF <- function(f, fmat) {
   return(cdf)
 }
 
-
+#' @export
 point_ED <- function(f1_cdf, f2_cdf) {
   # Calculate if function 1 or function 2 is more extreme
   # returns 1 if f1 is more extreme, -1 if f2 is more extreme, and 0 if equivalent
+  rows = length(f1_cdf)
 
-  for (x in 1:length(f1_cdf)) {
+  for (x in 1:rows) {
     diff = f1_cdf[x] - f2_cdf[x]
     if (diff != 0.0) {
       return(sign(diff))
@@ -40,6 +42,7 @@ point_ED <- function(f1_cdf, f2_cdf) {
   return(0)
 }
 
+#' @export
 ED <- function(fmat) {
   # Takes a matrix of functions (each column is a function) and returns there ED ordering
   # from deepest to shallowest

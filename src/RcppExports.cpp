@@ -5,20 +5,46 @@
 
 using namespace Rcpp;
 
-// timesTwo
-NumericVector timesTwo(NumericVector x);
-RcppExport SEXP _extdepth_timesTwo(SEXP xSEXP) {
+// dCDF
+NumericVector dCDF(NumericVector f, NumericMatrix fmat);
+RcppExport SEXP _extdepth_dCDF(SEXP fSEXP, SEXP fmatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(timesTwo(x));
+    Rcpp::traits::input_parameter< NumericVector >::type f(fSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type fmat(fmatSEXP);
+    rcpp_result_gen = Rcpp::wrap(dCDF(f, fmat));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pointwise_ED
+int pointwise_ED(NumericVector f1_cdf, NumericVector f2_cdf);
+RcppExport SEXP _extdepth_pointwise_ED(SEXP f1_cdfSEXP, SEXP f2_cdfSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type f1_cdf(f1_cdfSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type f2_cdf(f2_cdfSEXP);
+    rcpp_result_gen = Rcpp::wrap(pointwise_ED(f1_cdf, f2_cdf));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ED_c
+NumericVector ED_c(NumericMatrix fmat);
+RcppExport SEXP _extdepth_ED_c(SEXP fmatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type fmat(fmatSEXP);
+    rcpp_result_gen = Rcpp::wrap(ED_c(fmat));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_extdepth_timesTwo", (DL_FUNC) &_extdepth_timesTwo, 1},
+    {"_extdepth_dCDF", (DL_FUNC) &_extdepth_dCDF, 2},
+    {"_extdepth_pointwise_ED", (DL_FUNC) &_extdepth_pointwise_ED, 2},
+    {"_extdepth_ED_c", (DL_FUNC) &_extdepth_ED_c, 1},
     {NULL, NULL, 0}
 };
 
