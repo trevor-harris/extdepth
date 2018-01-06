@@ -2,6 +2,11 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @export
+depth_c <- function(f, fmat) {
+    .Call('_extdepth_depth_c', PACKAGE = 'extdepth', f, fmat)
+}
+
+#' @export
 dCDF <- function(f, fmat) {
     .Call('_extdepth_dCDF', PACKAGE = 'extdepth', f, fmat)
 }

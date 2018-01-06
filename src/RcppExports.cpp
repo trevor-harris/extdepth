@@ -5,6 +5,18 @@
 
 using namespace Rcpp;
 
+// depth_c
+NumericVector depth_c(NumericVector f, NumericMatrix fmat);
+RcppExport SEXP _extdepth_depth_c(SEXP fSEXP, SEXP fmatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type f(fSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type fmat(fmatSEXP);
+    rcpp_result_gen = Rcpp::wrap(depth_c(f, fmat));
+    return rcpp_result_gen;
+END_RCPP
+}
 // dCDF
 NumericVector dCDF(NumericVector f, NumericMatrix fmat);
 RcppExport SEXP _extdepth_dCDF(SEXP fSEXP, SEXP fmatSEXP) {
@@ -42,6 +54,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_extdepth_depth_c", (DL_FUNC) &_extdepth_depth_c, 2},
     {"_extdepth_dCDF", (DL_FUNC) &_extdepth_dCDF, 2},
     {"_extdepth_pointwise_ED", (DL_FUNC) &_extdepth_pointwise_ED, 2},
     {"_extdepth_ED_c", (DL_FUNC) &_extdepth_ED_c, 1},

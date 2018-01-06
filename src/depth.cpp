@@ -14,6 +14,23 @@ using namespace Rcpp;
 
 //' @export
 // [[Rcpp::export]]
+NumericVector depth_c(NumericVector f, NumericMatrix fmat) {
+
+  // get matrix dimension
+  int rows = fmat.nrow();
+  int cols = fmat.ncol();
+
+  // compute the depths at each observation of f
+  NumericVector depth(rows);
+
+  for(int row = 0; row < rows; row++) {
+    depth(row) = 1 - (double(std::abs(sum(sign(f(row) - fmat(row, _))))) / double(cols));
+  };
+  return depth;
+}
+
+//' @export
+// [[Rcpp::export]]
 NumericVector dCDF(NumericVector f, NumericMatrix fmat) {
 
   // get matrix dimension
@@ -22,23 +39,17 @@ NumericVector dCDF(NumericVector f, NumericMatrix fmat) {
 
   // compute the depths at each observation of f
   NumericVector depths(rows);
-  // NumericVector diffs(cols);
 
   for(int row = 0; row < rows; row++) {
-    // diffs = (f(row) > fmat(row, _)) - (f(row) < fmat(row, _));
-    // diffs = sign(f(row) - fmat(row, _));
     depths(row) = 1 - (double(std::abs(sum(sign(f(row) - fmat(row, _))))) / double(cols));
   };
 
   // compute the cdf
   NumericVector cdf(rows);
-  // LogicalVector lt_r(rows);
   double r;
 
   for (int r_ind = 0; r_ind < rows; r_ind++) {
     r = double(r_ind + 1) / double(rows);
-
-    // lt_r = depths <= r;
     cdf(r_ind) = double(sum(depths <= r)) / double(rows);
   };
 
@@ -49,12 +60,12 @@ NumericVector dCDF(NumericVector f, NumericMatrix fmat) {
 // [[Rcpp::export]]
 int pointwise_ED(NumericVector f1_cdf, NumericVector f2_cdf) {
   int rows = f1_cdf.length();
-  double cdf_diff;
+  double differ;
 
   for (int row = 0; row < rows; row++) {
-    cdf_diff = f1_cdf(row) - f2_cdf(row);
-    if (cdf_diff != 0.0) {
-      return (cdf_diff > 0) - (cdf_diff < 0);
+    differ = f1_cdf(row) - f2_cdf(row);
+    if (differ != 0.0) {
+      return (differ > 0) - (differ < 0);
     };
   };
 
@@ -66,26 +77,24 @@ int pointwise_ED(NumericVector f1_cdf, NumericVector f2_cdf) {
 NumericVector ED_c(NumericMatrix fmat) {
 
   // get matrix dimension
-  int rows = fmat.nrow();
-  int cols = fmat.ncol();
+  int obs = fmat.nrow();
+  int fns = fmat.ncol();
 
-  NumericMatrix cdf(rows, cols);
-  for (int col = 0; col < cols; col++) {
-    cdf(_, col) = dCDF(fmat(_, col), fmat);
+  // compute the dCDF for each function in fmat
+  NumericMatrix cdf(obs, fns);
+  for (int f = 0; f < fns; f++) {
+    cdf(_, f) = dCDF(fmat(_, f), fmat);
   };
 
-  NumericVector edepths(cols);
-  int gt;
-  for (int col1 = 0; col1 < cols; col1++) {
-    gt = 0;
-    for (int col2 = 0; col2 < cols; col2++) {
-        gt += (pointwise_ED(cdf(_, col1), cdf(_, col2)) > 0);
+  // compute number of functions each function is greater than
+  NumericVector edepths(fns);
+  for (int f1 = 0; f1 < fns; f1++) {
+    for (int f2 = 0; f2 < fns; f2++) {
+      edepths(f1) += (pointwise_ED(cdf(_, f1), cdf(_, f2)) > 0);
     };
-
-    edepths(col1) = gt;
   };
 
-  return edepths / rows;
+  return edepths / fns;
 };
 
 

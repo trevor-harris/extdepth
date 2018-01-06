@@ -47,23 +47,28 @@ ED <- function(fmat) {
   # Takes a matrix of functions (each column is a function) and returns there ED ordering
   # from deepest to shallowest
 
+  # get dims
+  obs = nrow(fmat)
+  funcs = ncol(fmat)
+
   # find the depth CDF for each function
-  dCDF = matrix(0, nrow(fmat), ncol(fmat))
-  for (col in 1:ncol(fmat)) {
-    dCDF[,col] = depth_CDF(fmat[,col], fmat)
+  dCDF = matrix(0, obs, funcs)
+  for (f in 1:funcs) {
+    dCDF[,f] = depth_CDF(fmat[,f], fmat)
   }
 
   # for each depth CDF (f1) count the number of depth CDFs (f2) that it's more extreme than
-  EDepth = integer(0)
-  for (f1 in 1:ncol(dCDF)) {
+  edepth = rep(0, funcs)
+  for (f1 in 1:funcs) {
     gt = 0
-    for (f2 in 1:ncol(dCDF)) {
+    for (f2 in 1:funcs) {
       gt = gt + (point_ED(dCDF[,f1], dCDF[,f2]) > 0)
     }
-    EDepth = c(EDepth, gt)
+    edepth[f1] = gt
   }
 
-  return(EDepth / nrow(fmat))
+  return(edepth / funcs)
 }
+
 
 
