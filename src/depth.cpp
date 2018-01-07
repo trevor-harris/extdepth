@@ -1,37 +1,9 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-
-// This is a simple example of exporting a C++ function to R. You can
-// source this function into an R session using the Rcpp::sourceCpp
-// function (or via the Source button on the editor toolbar). Learn
-// more about Rcpp at:
-//
-//   http://www.rcpp.org/
-//   http://adv-r.had.co.nz/Rcpp.html
-//   http://gallery.rcpp.org/
-//
-
 //' @export
 // [[Rcpp::export]]
 NumericVector depth_c(NumericVector f, NumericMatrix fmat) {
-
-  // get matrix dimension
-  int rows = fmat.nrow();
-  int cols = fmat.ncol();
-
-  // compute the depths at each observation of f
-  NumericVector depth(rows);
-
-  for(int row = 0; row < rows; row++) {
-    depth(row) = 1 - (double(std::abs(sum(sign(f(row) - fmat(row, _))))) / double(cols));
-  };
-  return depth;
-}
-
-//' @export
-// [[Rcpp::export]]
-NumericVector dCDF(NumericVector f, NumericMatrix fmat) {
 
   // get matrix dimension
   int rows = fmat.nrow();
@@ -43,14 +15,23 @@ NumericVector dCDF(NumericVector f, NumericMatrix fmat) {
   for(int row = 0; row < rows; row++) {
     depths(row) = 1 - (double(std::abs(sum(sign(f(row) - fmat(row, _))))) / double(cols));
   };
+  return depths;
+}
+
+//' @export
+// [[Rcpp::export]]
+NumericVector dCDF_c(NumericVector depths) {
+
+  // get matrix dimension
+  double obs = depths.length();
 
   // compute the cdf
-  NumericVector cdf(rows);
+  NumericVector cdf(obs);
   double r;
 
-  for (int r_ind = 0; r_ind < rows; r_ind++) {
-    r = double(r_ind + 1) / double(rows);
-    cdf(r_ind) = double(sum(depths <= r)) / double(rows);
+  for (int r_ind = 0; r_ind < obs; r_ind++) {
+    r = double(r_ind + 1) / double(obs);
+    cdf(r_ind) = double(sum(depths <= r)) / double(obs);
   };
 
   return cdf;
@@ -58,17 +39,19 @@ NumericVector dCDF(NumericVector f, NumericMatrix fmat) {
 
 //' @export
 // [[Rcpp::export]]
-int pointwise_ED(NumericVector f1_cdf, NumericVector f2_cdf) {
+int ED_comparison(NumericVector f1_cdf, NumericVector f2_cdf) {
   int rows = f1_cdf.length();
-  double differ;
+  double cdf_diff;
 
+  // left tail comparions of the cdfs. returns 1 if f1 > f2 and -1 if f1 < f2.
   for (int row = 0; row < rows; row++) {
-    differ = f1_cdf(row) - f2_cdf(row);
-    if (differ != 0.0) {
-      return (differ > 0) - (differ < 0);
+    cdf_diff = f1_cdf(row) - f2_cdf(row);
+    if (cdf_diff != 0.0) {
+      return (cdf_diff > 0) - (cdf_diff < 0);
     };
   };
 
+  // if cdfs are identical then return 0. f1 ~ f2.
   return 0;
 }
 
@@ -83,14 +66,14 @@ NumericVector ED_c(NumericMatrix fmat) {
   // compute the dCDF for each function in fmat
   NumericMatrix cdf(obs, fns);
   for (int f = 0; f < fns; f++) {
-    cdf(_, f) = dCDF(fmat(_, f), fmat);
+    cdf(_, f) = dCDF_c(depth_c(fmat(_, f), fmat));
   };
 
   // compute number of functions each function is greater than
   NumericVector edepths(fns);
   for (int f1 = 0; f1 < fns; f1++) {
     for (int f2 = 0; f2 < fns; f2++) {
-      edepths(f1) += (pointwise_ED(cdf(_, f1), cdf(_, f2)) > 0);
+      edepths(f1) += (ED_comparison(cdf(_, f1), cdf(_, f2)) > 0);
     };
   };
 

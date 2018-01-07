@@ -2,11 +2,11 @@
 
 export(ED)
 export(ED_c)
-export(dCDF)
+export(ED_comparison)
+export(dCDF_c)
 export(depth)
 export(depth_CDF)
 export(depth_c)
 export(point_ED)
-export(pointwise_ED)
 importFrom(Rcpp,sourceCpp)
 useDynLib(extdepth)
