@@ -25,7 +25,7 @@ gc()
 library(microbenchmark)
 library(extdepth)
 
-n = 50
+n = 10
 S = matrix(rnorm(n*1001), n, 1001)
 
 f1 = S[,1]
@@ -48,8 +48,6 @@ microbenchmark(point_ED(cdf1, cdf2), times = t, unit = "us")
 microbenchmark(pwED(cdf1, cdf2), times = t, unit = "us")
 
 # full check
-microbenchmark(ED_c(S), times = 10)
-microbenchmark(ED(S), times = 10)
+microbenchmark(ED_c(S), times = 10, unit = "s")
+microbenchmark(ED(S), times = 10, unit = "s")
 
-
-sum(ED_c(S) == ED(S))
