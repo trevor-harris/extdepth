@@ -21,14 +21,16 @@ df <- data.frame(x = rep(seq_len(ncol(m)), each = nrow(m)),
                  y = rep(seq_len(nrow(m)), times = ncol(m)),
                  z = c(m))
 
+mod = gam(z ~ te(x, y), data = df)
 mod <- matrix(gam(z ~ te(x, y), data = df)$fitted,
               nrow(m),
               ncol(m))
 
 plot_ly(showscale = FALSE) %>% 
-  add_surface(z = ~tas[[1]]) %>%
-  add_surface(z = ~mod)
+  add_surface(z = ~tas[[1]])
 
+plot_ly(showscale = FALSE) %>% 
+  add_surface(z = ~mod)
 
 # find basis coefficients
 
