@@ -3,7 +3,7 @@ using namespace Rcpp;
 
 //' @export
 // [[Rcpp::export]]
-NumericVector depth_c(NumericVector f, NumericMatrix fmat) {
+NumericVector depth(NumericVector f, NumericMatrix fmat) {
 
   // get matrix dimension
   int rows = fmat.nrow();
@@ -20,7 +20,7 @@ NumericVector depth_c(NumericVector f, NumericMatrix fmat) {
 
 //' @export
 // [[Rcpp::export]]
-NumericVector dCDF_c(NumericVector depths) {
+NumericVector dCDF(NumericVector depths) {
 
   // get matrix dimension
   double obs = depths.length();
@@ -39,7 +39,7 @@ NumericVector dCDF_c(NumericVector depths) {
 
 //' @export
 // [[Rcpp::export]]
-int ED_comparison(NumericVector f1_cdf, NumericVector f2_cdf) {
+int ed_compare(NumericVector f1_cdf, NumericVector f2_cdf) {
   int rows = f1_cdf.length();
   double cdf_diff;
 
@@ -57,7 +57,7 @@ int ED_comparison(NumericVector f1_cdf, NumericVector f2_cdf) {
 
 //' @export
 // [[Rcpp::export]]
-NumericVector ED_c(NumericMatrix fmat) {
+NumericVector ED(NumericMatrix fmat) {
 
   // get matrix dimension
   int obs = fmat.nrow();
@@ -66,14 +66,14 @@ NumericVector ED_c(NumericMatrix fmat) {
   // compute the dCDF for each function in fmat
   NumericMatrix cdf(obs, fns);
   for (int f = 0; f < fns; f++) {
-    cdf(_, f) = dCDF_c(depth_c(fmat(_, f), fmat));
+    cdf(_, f) = dCDF(depth(fmat(_, f), fmat));
   };
 
   // compute number of functions each function is greater than
   NumericVector edepths(fns);
   for (int f1 = 0; f1 < fns; f1++) {
     for (int f2 = 0; f2 < fns; f2++) {
-      edepths(f1) += (ED_comparison(cdf(_, f1), cdf(_, f2)) > 0);
+      edepths(f1) += (ed_compare(cdf(_, f1), cdf(_, f2)) > 0);
     };
   };
 

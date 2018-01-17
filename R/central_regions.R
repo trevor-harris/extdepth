@@ -1,5 +1,6 @@
 # Central regions
 
+#' @export
 central_region <- function(ext.depths, alpha = 0.05) {
   # Takes a list of extremal depths and an alpha level and returns the functions corresponding to
   # the lower and upper bounds. Also returns the median function

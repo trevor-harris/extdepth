@@ -2,22 +2,22 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @export
-depth_c <- function(f, fmat) {
-    .Call('_extdepth_depth_c', PACKAGE = 'extdepth', f, fmat)
+depth <- function(f, fmat) {
+    .Call('_extdepth_depth', PACKAGE = 'extdepth', f, fmat)
 }
 
 #' @export
-dCDF_c <- function(depths) {
-    .Call('_extdepth_dCDF_c', PACKAGE = 'extdepth', depths)
+dCDF <- function(depths) {
+    .Call('_extdepth_dCDF', PACKAGE = 'extdepth', depths)
 }
 
 #' @export
-ED_comparison <- function(f1_cdf, f2_cdf) {
-    .Call('_extdepth_ED_comparison', PACKAGE = 'extdepth', f1_cdf, f2_cdf)
+ed_compare <- function(f1_cdf, f2_cdf) {
+    .Call('_extdepth_ed_compare', PACKAGE = 'extdepth', f1_cdf, f2_cdf)
 }
 
 #' @export
-ED_c <- function(fmat) {
-    .Call('_extdepth_ED_c', PACKAGE = 'extdepth', fmat)
+ED <- function(fmat) {
+    .Call('_extdepth_ED', PACKAGE = 'extdepth', fmat)
 }
 

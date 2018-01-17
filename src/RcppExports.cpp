@@ -5,58 +5,58 @@
 
 using namespace Rcpp;
 
-// depth_c
-NumericVector depth_c(NumericVector f, NumericMatrix fmat);
-RcppExport SEXP _extdepth_depth_c(SEXP fSEXP, SEXP fmatSEXP) {
+// depth
+NumericVector depth(NumericVector f, NumericMatrix fmat);
+RcppExport SEXP _extdepth_depth(SEXP fSEXP, SEXP fmatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type f(fSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type fmat(fmatSEXP);
-    rcpp_result_gen = Rcpp::wrap(depth_c(f, fmat));
+    rcpp_result_gen = Rcpp::wrap(depth(f, fmat));
     return rcpp_result_gen;
 END_RCPP
 }
-// dCDF_c
-NumericVector dCDF_c(NumericVector depths);
-RcppExport SEXP _extdepth_dCDF_c(SEXP depthsSEXP) {
+// dCDF
+NumericVector dCDF(NumericVector depths);
+RcppExport SEXP _extdepth_dCDF(SEXP depthsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type depths(depthsSEXP);
-    rcpp_result_gen = Rcpp::wrap(dCDF_c(depths));
+    rcpp_result_gen = Rcpp::wrap(dCDF(depths));
     return rcpp_result_gen;
 END_RCPP
 }
-// ED_comparison
-int ED_comparison(NumericVector f1_cdf, NumericVector f2_cdf);
-RcppExport SEXP _extdepth_ED_comparison(SEXP f1_cdfSEXP, SEXP f2_cdfSEXP) {
+// ed_compare
+int ed_compare(NumericVector f1_cdf, NumericVector f2_cdf);
+RcppExport SEXP _extdepth_ed_compare(SEXP f1_cdfSEXP, SEXP f2_cdfSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type f1_cdf(f1_cdfSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type f2_cdf(f2_cdfSEXP);
-    rcpp_result_gen = Rcpp::wrap(ED_comparison(f1_cdf, f2_cdf));
+    rcpp_result_gen = Rcpp::wrap(ed_compare(f1_cdf, f2_cdf));
     return rcpp_result_gen;
 END_RCPP
 }
-// ED_c
-NumericVector ED_c(NumericMatrix fmat);
-RcppExport SEXP _extdepth_ED_c(SEXP fmatSEXP) {
+// ED
+NumericVector ED(NumericMatrix fmat);
+RcppExport SEXP _extdepth_ED(SEXP fmatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type fmat(fmatSEXP);
-    rcpp_result_gen = Rcpp::wrap(ED_c(fmat));
+    rcpp_result_gen = Rcpp::wrap(ED(fmat));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_extdepth_depth_c", (DL_FUNC) &_extdepth_depth_c, 2},
-    {"_extdepth_dCDF_c", (DL_FUNC) &_extdepth_dCDF_c, 1},
-    {"_extdepth_ED_comparison", (DL_FUNC) &_extdepth_ED_comparison, 2},
-    {"_extdepth_ED_c", (DL_FUNC) &_extdepth_ED_c, 1},
+    {"_extdepth_depth", (DL_FUNC) &_extdepth_depth, 2},
+    {"_extdepth_dCDF", (DL_FUNC) &_extdepth_dCDF, 1},
+    {"_extdepth_ed_compare", (DL_FUNC) &_extdepth_ed_compare, 2},
+    {"_extdepth_ED", (DL_FUNC) &_extdepth_ED, 1},
     {NULL, NULL, 0}
 };
 
