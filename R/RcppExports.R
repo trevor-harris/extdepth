@@ -21,3 +21,23 @@ ED <- function(fmat) {
     .Call('_extdepth_ED', PACKAGE = 'extdepth', fmat)
 }
 
+#' @export
+fast_depth <- function(f, fmat) {
+    .Call('_extdepth_fast_depth', PACKAGE = 'extdepth', f, fmat)
+}
+
+#' @export
+dCDF_r <- function(depths, r) {
+    .Call('_extdepth_dCDF_r', PACKAGE = 'extdepth', depths, r)
+}
+
+#' @export
+fast_compare <- function(d1, d2) {
+    .Call('_extdepth_fast_compare', PACKAGE = 'extdepth', d1, d2)
+}
+
+#' @export
+fast_ED <- function(fmat) {
+    .Call('_extdepth_fast_ED', PACKAGE = 'extdepth', fmat)
+}
+
