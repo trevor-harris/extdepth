@@ -43,7 +43,7 @@ point_ED <- function(f1_cdf, f2_cdf) {
 }
 
 #' @export
-ED <- function(fmat) {
+EDr <- function(fmat) {
   # Takes a matrix of functions (each column is a function) and returns there ED ordering
   # from deepest to shallowest
 

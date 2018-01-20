@@ -75,18 +75,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// fast_compare
-int fast_compare(NumericVector d1, NumericVector d2);
-RcppExport SEXP _extdepth_fast_compare(SEXP d1SEXP, SEXP d2SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type d1(d1SEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type d2(d2SEXP);
-    rcpp_result_gen = Rcpp::wrap(fast_compare(d1, d2));
-    return rcpp_result_gen;
-END_RCPP
-}
 // fast_ED
 NumericVector fast_ED(NumericMatrix fmat);
 RcppExport SEXP _extdepth_fast_ED(SEXP fmatSEXP) {
@@ -106,7 +94,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_extdepth_ED", (DL_FUNC) &_extdepth_ED, 1},
     {"_extdepth_fast_depth", (DL_FUNC) &_extdepth_fast_depth, 2},
     {"_extdepth_dCDF_r", (DL_FUNC) &_extdepth_dCDF_r, 2},
-    {"_extdepth_fast_compare", (DL_FUNC) &_extdepth_fast_compare, 2},
     {"_extdepth_fast_ED", (DL_FUNC) &_extdepth_fast_ED, 1},
     {NULL, NULL, 0}
 };

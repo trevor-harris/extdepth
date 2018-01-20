@@ -5,7 +5,7 @@ gc()
 library(microbenchmark)
 library(extdepth)
 
-n = 100*100
+n = 100*10
 S = matrix(rnorm(n*100), n, 100)
 
 f1 = S[,1]
@@ -25,5 +25,6 @@ microbenchmark(point_EDr(cdf1, cdf2), times = 10000, unit = "us")
 
 # full check
 microbenchmark(ED(S), times = 10, unit = "s")
+microbenchmark(fast_ED(S), times = 10, unit = "s")
 microbenchmark(EDr(S), times = 10, unit = "s")
 

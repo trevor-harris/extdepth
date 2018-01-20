@@ -32,11 +32,6 @@ dCDF_r <- function(depths, r) {
 }
 
 #' @export
-fast_compare <- function(d1, d2) {
-    .Call('_extdepth_fast_compare', PACKAGE = 'extdepth', d1, d2)
-}
-
-#' @export
 fast_ED <- function(fmat) {
     .Call('_extdepth_fast_ED', PACKAGE = 'extdepth', fmat)
 }

@@ -24,27 +24,27 @@ double dCDF_r(NumericVector depths, double r) {
   return double(sum(depths <= r)) / depths.length();
 }
 
-// make this do the very innermost loop
-//' @export
-// [[Rcpp::export]]
-int fast_compare(NumericVector d1, NumericVector d2) {
-  int rows = d1.length();
-  double r;
-  double cdf_diff;
-
-  // left tail comparions of the cdfs. returns 1 if f1 > f2 and -1 if f1 < f2.
-  for (int row = 1; row < rows+1; row++) {
-    r = row / double(rows);
-    cdf_diff = (sum(d1 <= r) - sum(d2 <= r)) / double(rows);
-    //cdf_diff = dCDF_r(d1, r) - dCDF_r(d2, r);
-    if (cdf_diff > 0) {
-      return 1;
-    };
-  };
-
-  // if cdfs are identical then return 0. f1 ~ f2.
-  return 0;
-}
+// // make this do the very innermost loop
+// //' @export
+// // [[Rcpp::export]]
+// int fast_compare(NumericVector d1, NumericVector d2) {
+//   int rows = d1.length();
+//   double r;
+//   double cdf_diff;
+//
+//   // left tail comparions of the cdfs. returns 1 if f1 > f2 and -1 if f1 < f2.
+//   for (int row = 1; row < rows+1; row++) {
+//     r = row / double(rows);
+//     cdf_diff = (sum(d1 <= r) - sum(d2 <= r)) / double(rows);
+//     //cdf_diff = dCDF_r(d1, r) - dCDF_r(d2, r);
+//     if (cdf_diff > 0) {
+//       return 1;
+//     };
+//   };
+//
+//   // if cdfs are identical then return 0. f1 ~ f2.
+//   return 0;
+// }
 
 
 
@@ -64,9 +64,27 @@ NumericVector fast_ED(NumericMatrix fmat) {
 
   // compute number of functions each function is greater than
   NumericVector edepths(fns);
+  NumericVector d1(obs);
+  NumericVector d2(obs);
+
   for (int f1 = 0; f1 < fns; f1++) {
+    d1 = depths(_, f1);
+    edepths(f1) = 0;
+
     for (int f2 = 0; f2 < fns; f2++) {
-      edepths(f1) += fast_compare(depths(_, f1), depths(_, f2));
+      if (f1 == f2) {continue;};
+
+      d2 = depths(_, f2);
+      for (int x = 1; x <= obs; x++) {
+        double r = x / double(obs);
+        double cdf1 = sum(d1 <= r) / obs;
+        double cdf2 = sum(d2 <= r) / obs;
+
+        if (cdf1 != cdf2) {
+          edepths(f1) += (cdf1 > cdf2);
+          break;
+        };
+      };
     };
   };
 
