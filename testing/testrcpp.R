@@ -28,3 +28,9 @@ microbenchmark(ED(S), times = 10, unit = "s")
 microbenchmark(fast_ED(S), times = 10, unit = "s")
 microbenchmark(EDr(S), times = 10, unit = "s")
 
+f1 = S[,1]
+fmat = S[,-1]
+
+ed1 = ED_f(f1,S)
+microbenchmark(ED_f(f1,S), times = 10, unit = "s")
+

@@ -67,4 +67,23 @@ EDr <- function(fmat) {
 }
 
 
+#' @export
+ED_f <- function(f, fmat) {
+
+  # get dims
+  obs = nrow(fmat)
+  fns = ncol(fmat)
+
+  f_dCDF = depth_CDF(f, fmat)
+  fmat_dCDF = sapply(1:fns, function(f) depth_CDF(fmat[,f], fmat))
+
+  # for each depth CDF (f1) count the number of depth CDFs (f2) that it's more extreme than
+  ed = 0
+  for (f2 in 1:fns) {
+    ed = ed + (point_ED(f_dCDF, fmat_dCDF[,f2]) > 0)
+  }
+  return(ed / fns)
+}
+
+
 

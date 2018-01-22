@@ -63,18 +63,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// dCDF_r
-double dCDF_r(NumericVector depths, double r);
-RcppExport SEXP _extdepth_dCDF_r(SEXP depthsSEXP, SEXP rSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type depths(depthsSEXP);
-    Rcpp::traits::input_parameter< double >::type r(rSEXP);
-    rcpp_result_gen = Rcpp::wrap(dCDF_r(depths, r));
-    return rcpp_result_gen;
-END_RCPP
-}
 // fast_ED
 NumericVector fast_ED(NumericMatrix fmat);
 RcppExport SEXP _extdepth_fast_ED(SEXP fmatSEXP) {
@@ -93,7 +81,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_extdepth_ed_compare", (DL_FUNC) &_extdepth_ed_compare, 2},
     {"_extdepth_ED", (DL_FUNC) &_extdepth_ED, 1},
     {"_extdepth_fast_depth", (DL_FUNC) &_extdepth_fast_depth, 2},
-    {"_extdepth_dCDF_r", (DL_FUNC) &_extdepth_dCDF_r, 2},
     {"_extdepth_fast_ED", (DL_FUNC) &_extdepth_fast_ED, 1},
     {NULL, NULL, 0}
 };

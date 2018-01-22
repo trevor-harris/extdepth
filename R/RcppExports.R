@@ -27,11 +27,6 @@ fast_depth <- function(f, fmat) {
 }
 
 #' @export
-dCDF_r <- function(depths, r) {
-    .Call('_extdepth_dCDF_r', PACKAGE = 'extdepth', depths, r)
-}
-
-#' @export
 fast_ED <- function(fmat) {
     .Call('_extdepth_fast_ED', PACKAGE = 'extdepth', fmat)
 }

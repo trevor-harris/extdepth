@@ -20,36 +20,6 @@ NumericVector fast_depth(NumericVector f, NumericMatrix fmat) {
 
 //' @export
 // [[Rcpp::export]]
-double dCDF_r(NumericVector depths, double r) {
-  return double(sum(depths <= r)) / depths.length();
-}
-
-// // make this do the very innermost loop
-// //' @export
-// // [[Rcpp::export]]
-// int fast_compare(NumericVector d1, NumericVector d2) {
-//   int rows = d1.length();
-//   double r;
-//   double cdf_diff;
-//
-//   // left tail comparions of the cdfs. returns 1 if f1 > f2 and -1 if f1 < f2.
-//   for (int row = 1; row < rows+1; row++) {
-//     r = row / double(rows);
-//     cdf_diff = (sum(d1 <= r) - sum(d2 <= r)) / double(rows);
-//     //cdf_diff = dCDF_r(d1, r) - dCDF_r(d2, r);
-//     if (cdf_diff > 0) {
-//       return 1;
-//     };
-//   };
-//
-//   // if cdfs are identical then return 0. f1 ~ f2.
-//   return 0;
-// }
-
-
-
-//' @export
-// [[Rcpp::export]]
 NumericVector fast_ED(NumericMatrix fmat) {
 
   // get matrix dimension
@@ -77,17 +47,39 @@ NumericVector fast_ED(NumericMatrix fmat) {
       d2 = depths(_, f2);
       for (int x = 1; x <= obs; x++) {
         double r = x / double(obs);
-        double cdf1 = sum(d1 <= r) / obs;
-        double cdf2 = sum(d2 <= r) / obs;
+        double cdf1 = sum(d1 <= r) / double(obs);
+        double cdf2 = sum(d2 <= r) / double(obs);
 
         if (cdf1 != cdf2) {
           edepths(f1) += (cdf1 > cdf2);
           break;
-        };
-      };
-    };
-  };
+        }
+      }
+    }
+  }
 
   return edepths / fns;
 };
 
+
+
+
+// //' @export
+// // [[Rcpp::export]]
+// double dCDF_r(NumericVector depths, double r) {
+//   return double(sum(depths <= r)) / depths.length();
+// }
+//
+// //' @export
+// // [[Rcpp::export]]
+// NumericMatrix depths(NumericMatrix fmat) {
+//   // get matrix dimension
+//   int obs = fmat.nrow();
+//   int fns = fmat.ncol();
+//
+//   NumericMatrix depth(obs, fns);
+//   for (int f = 0; f < fns; f++) {
+//     depth(_, f) = fast_depth(fmat(_, f), fmat);
+//   }
+//   return depth;
+// }
