@@ -36,7 +36,7 @@ NumericVector extdepth(NumericVector g, NumericMatrix fmat) {
   };
 
   // compute number of functions each function is greater than
-  double edepth = 1;
+  double edepth = 0;
   double cdf1 = 0;
   double cdf2 = 0;
   double r = 0;
