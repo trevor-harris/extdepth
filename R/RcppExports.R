@@ -7,7 +7,12 @@ depth <- function(f, fmat) {
 }
 
 #' @export
-ED <- function(fmat) {
-    .Call('_extdepth_ED', PACKAGE = 'extdepth', fmat)
+extdepth <- function(g, fmat) {
+    .Call('_extdepth_extdepth', PACKAGE = 'extdepth', g, fmat)
+}
+
+#' @export
+extdepth_all <- function(fmat) {
+    .Call('_extdepth_extdepth_all', PACKAGE = 'extdepth', fmat)
 }
 

@@ -17,21 +17,34 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// ED
-NumericVector ED(NumericMatrix fmat);
-RcppExport SEXP _extdepth_ED(SEXP fmatSEXP) {
+// extdepth
+NumericVector extdepth(NumericVector g, NumericMatrix fmat);
+RcppExport SEXP _extdepth_extdepth(SEXP gSEXP, SEXP fmatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type g(gSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type fmat(fmatSEXP);
+    rcpp_result_gen = Rcpp::wrap(extdepth(g, fmat));
+    return rcpp_result_gen;
+END_RCPP
+}
+// extdepth_all
+NumericVector extdepth_all(NumericMatrix fmat);
+RcppExport SEXP _extdepth_extdepth_all(SEXP fmatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type fmat(fmatSEXP);
-    rcpp_result_gen = Rcpp::wrap(ED(fmat));
+    rcpp_result_gen = Rcpp::wrap(extdepth_all(fmat));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_extdepth_depth", (DL_FUNC) &_extdepth_depth, 2},
-    {"_extdepth_ED", (DL_FUNC) &_extdepth_ED, 1},
+    {"_extdepth_extdepth", (DL_FUNC) &_extdepth_extdepth, 2},
+    {"_extdepth_extdepth_all", (DL_FUNC) &_extdepth_extdepth_all, 1},
     {NULL, NULL, 0}
 };
 
