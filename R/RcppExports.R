@@ -7,27 +7,7 @@ depth <- function(f, fmat) {
 }
 
 #' @export
-dCDF <- function(depths) {
-    .Call('_extdepth_dCDF', PACKAGE = 'extdepth', depths)
-}
-
-#' @export
-ed_compare <- function(f1_cdf, f2_cdf) {
-    .Call('_extdepth_ed_compare', PACKAGE = 'extdepth', f1_cdf, f2_cdf)
-}
-
-#' @export
 ED <- function(fmat) {
     .Call('_extdepth_ED', PACKAGE = 'extdepth', fmat)
-}
-
-#' @export
-fast_depth <- function(f, fmat) {
-    .Call('_extdepth_fast_depth', PACKAGE = 'extdepth', f, fmat)
-}
-
-#' @export
-fast_ED <- function(fmat) {
-    .Call('_extdepth_fast_ED', PACKAGE = 'extdepth', fmat)
 }
 

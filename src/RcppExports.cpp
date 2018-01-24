@@ -17,29 +17,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// dCDF
-NumericVector dCDF(NumericVector depths);
-RcppExport SEXP _extdepth_dCDF(SEXP depthsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type depths(depthsSEXP);
-    rcpp_result_gen = Rcpp::wrap(dCDF(depths));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ed_compare
-int ed_compare(NumericVector f1_cdf, NumericVector f2_cdf);
-RcppExport SEXP _extdepth_ed_compare(SEXP f1_cdfSEXP, SEXP f2_cdfSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type f1_cdf(f1_cdfSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type f2_cdf(f2_cdfSEXP);
-    rcpp_result_gen = Rcpp::wrap(ed_compare(f1_cdf, f2_cdf));
-    return rcpp_result_gen;
-END_RCPP
-}
 // ED
 NumericVector ED(NumericMatrix fmat);
 RcppExport SEXP _extdepth_ED(SEXP fmatSEXP) {
@@ -51,37 +28,10 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// fast_depth
-NumericVector fast_depth(NumericVector f, NumericMatrix fmat);
-RcppExport SEXP _extdepth_fast_depth(SEXP fSEXP, SEXP fmatSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type f(fSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type fmat(fmatSEXP);
-    rcpp_result_gen = Rcpp::wrap(fast_depth(f, fmat));
-    return rcpp_result_gen;
-END_RCPP
-}
-// fast_ED
-NumericVector fast_ED(NumericMatrix fmat);
-RcppExport SEXP _extdepth_fast_ED(SEXP fmatSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type fmat(fmatSEXP);
-    rcpp_result_gen = Rcpp::wrap(fast_ED(fmat));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_extdepth_depth", (DL_FUNC) &_extdepth_depth, 2},
-    {"_extdepth_dCDF", (DL_FUNC) &_extdepth_dCDF, 1},
-    {"_extdepth_ed_compare", (DL_FUNC) &_extdepth_ed_compare, 2},
     {"_extdepth_ED", (DL_FUNC) &_extdepth_ED, 1},
-    {"_extdepth_fast_depth", (DL_FUNC) &_extdepth_fast_depth, 2},
-    {"_extdepth_fast_ED", (DL_FUNC) &_extdepth_fast_ED, 1},
     {NULL, NULL, 0}
 };
 
