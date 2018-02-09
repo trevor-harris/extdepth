@@ -2,7 +2,4 @@
 
 export(central_region)
 export(depth)
-export(extdepth)
-export(extdepth_all)
-importFrom(Rcpp,sourceCpp)
-useDynLib(extdepth)
+export(edepth)
