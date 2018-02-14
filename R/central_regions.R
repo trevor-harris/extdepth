@@ -1,22 +1,21 @@
 # Central regions
 
 #' @export
-central_region <- function(ext.depths, alpha = 0.05) {
+central_region <- function(fmat, ext.depths, alpha = 0.05) {
   # Takes a list of extremal depths and an alpha level and returns the functions corresponding to
   # the lower and upper bounds. Also returns the median function
 
+  # filter out functions outside the alpha level
+  fset = fmat[,ext.depths > alpha]
+
   # lower
-  lower = which(ext.depths == alpha)
+  lower = sapply(1:nrow(fset), function(x) min(fset[x,]))
 
   # upper
-  upper = which(ext.depths == 1-alpha)
-
-  # median
-  median = which.max(ext.depths)
+  upper = sapply(1:nrow(fset), function(x) max(fset[x,]))
 
   return(list(lower = lower,
-              upper = upper,
-              median = median))
+              upper = upper))
 }
 
 extremal_boxplot <- function() {

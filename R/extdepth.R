@@ -16,9 +16,6 @@ depth <- function(g, fmat) {
 #' @export
 edepth = function(g, fmat) {
 
-  # add g to the functional cloud fmat
-  fmat = cbind(g, fmat)
-
   # save the dimensions for convenience
   obs = nrow(fmat)
   fns = ncol(fmat)
