@@ -30,26 +30,60 @@ edepth = function(g, fmat) {
   }
 
   # get the allowed r values (for calculating the dCDF)
-  r = sort(unique(c(g_depth, fmat_depth)))
+  rvals = sort(unique(c(g_depth, fmat_depth)))
 
-  # find dCDF of g
-  g_dcdf = sapply(r, function(x) sum(g_depth <= x))
-
-  # find the dCDFs of each f in fmat
-  fmat_dcdf = matrix(0, length(r), ncol(fmat_depth))
-  for (j in 1:fns) {
-    fmat_dcdf[,j] = sapply(r, function(x) sum(fmat_depth[,j] <= x))
-  }
-
-  # compare the dCDF of g against each dCDF of fmat
-  ed = 0
-  for (j in 1:fns) {
-    for (i in 1:nrow(fmat_dcdf)) {
-      if(g_dcdf[i] != fmat_dcdf[i,j]) {
-        ed = ed + (fmat_dcdf[i,j] > g_dcdf[i])
-        break
+  partial_ed = rep(0, fns)
+  for (f in 1:fns) {
+    for (r in rvals) {
+      dg = sum(g_depth <= r)
+      df = sum(fmat_depth[,f] <= r)
+      if(dg != df) {
+        partial_ed[f] = (df > dg)
+        break;
       }
     }
   }
-  return(ed / fns)
+  ed = mean(partial_ed)
+  return(ed)
+}
+
+
+#' @export
+edepth_set = function(fmat) {
+
+  # save the dimensions for convenience
+  obs = nrow(fmat)
+  fns = ncol(fmat)
+
+  # find the depths of each f in fmat
+  fmat_depth = matrix(0, obs, fns)
+  for (j in 1:fns) {
+    fmat_depth[,j] = depth(fmat[,j], fmat)
+  }
+
+  # get the allowed r values (for calculating the dCDF)
+  rvals = unique(sort(unique(fmat_depth)))
+
+  # only need to fill in the top triangle
+  # invert later to get full partial_eds
+  partial_ed_upper = matrix(0, fns, fns)
+  for (f1 in 1:(fns-1)) {
+    for (f2 in (f1+1):fns) {
+      for (r in rvals) {
+        d1 = sum(fmat_depth[,f1] <= r)
+        d2 = sum(fmat_depth[,f2] <= r)
+        if(d1 != d2) {
+          partial_ed_upper[f1, f2] = (d2 > d1)
+          break;
+        }
+      }
+    }
+  }
+
+  # tranpose and invert the top triangle
+  partial_ed_lower = abs(1 - t(partial_ed_upper))*lower.tri(partial_ed_upper)
+  partial_ed = partial_ed_lower + partial_ed_upper + diag(1, fns, fns)
+  ed = rowMeans(partial_ed)
+
+  return(ed)
 }

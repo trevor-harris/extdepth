@@ -3,3 +3,4 @@
 export(central_region)
 export(depth)
 export(edepth)
+export(edepth_set)
