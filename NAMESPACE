@@ -2,5 +2,8 @@
 
 export(central_region)
 export(depth)
+export(depth_set)
 export(edepth)
+export(edepth_multi_fast)
 export(edepth_set)
+export(sort_by_ed)
