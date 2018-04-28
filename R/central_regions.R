@@ -6,7 +6,7 @@ central_region <- function(fmat, ext.depths, alpha = 0.05) {
   # the lower and upper bounds. Also returns the median function
 
   # filter out functions outside the alpha level
-  fset = fmat[,ext.depths > alpha]
+  fset = fmat[,ext.depths >= alpha]
 
   # lower
   lower = sapply(1:nrow(fset), function(x) min(fset[x,]))

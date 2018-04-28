@@ -27,9 +27,23 @@ depth_set <- function(fmat) {
   return(fmat_depth)
 }
 
+#' @export
+rank_depth = function(fmat) {
+  # technically not a depth
+  # At each time t, order the function observations from least to greatest
+  obs = nrow(fmat)
+  fns = ncol(fmat)
+
+  rdepth = matrix(0, obs, fns)
+  for (i in 1:obs) {
+    rdepth[i,] = rank(fmat[i,]) / fns
+  }
+  return(1 - rdepth)
+}
+
 
 #' @export
-edepth = function(g, fmat) {
+edepth = function(g, fmat, depth_function = "standard") {
 
   # save the dimensions for convenience
   obs = nrow(fmat)
@@ -39,10 +53,8 @@ edepth = function(g, fmat) {
   g_depth = depth(g, fmat)
 
   # find the depths of each f in fmat
-  fmat_depth = matrix(0, obs, fns)
-  for (j in 1:fns) {
-    fmat_depth[,j] = depth(fmat[,j], fmat)
-  }
+  if (depth_function == "standard") fmat_depth = depth_set(fmat)
+  if (depth_function == "rank") fmat_depth = rank_depth(fmat)
 
   # get the allowed r values (for calculating the dCDF)
   rvals = sort(unique(c(g_depth, fmat_depth)))
@@ -79,11 +91,8 @@ edepth_multi_fast = function(gmat, sorted_fmat, fdepths) {
   # find the depths of each f in fmat
   fmat_depth = fdepths
 
-  # find the depths of each f in fmat
-  gmat_depth = matrix(0, g.obs, g.fns)
-  for (j in 1:g.fns) {
-    gmat_depth[,j] = depth(gmat[,j], fmat)
-  }
+  # find the depths of each g in gmat
+  gmat_depth = depth_set(gmat)
 
   # get the allowed r values (for calculating the dCDF)
   rvals = unique(sort(c(gmat_depth, fmat_depth)))
@@ -107,17 +116,15 @@ edepth_multi_fast = function(gmat, sorted_fmat, fdepths) {
 
 
 #' @export
-edepth_set = function(fmat) {
+edepth_set = function(fmat, depth_function = "standard") {
 
   # save the dimensions for convenience
   obs = nrow(fmat)
   fns = ncol(fmat)
 
   # find the depths of each f in fmat
-  fmat_depth = matrix(0, obs, fns)
-  for (j in 1:fns) {
-    fmat_depth[,j] = depth(fmat[,j], fmat)
-  }
+  if (depth_function == "standard") fmat_depth = depth_set(fmat)
+  if (depth_function == "rank") fmat_depth = rank_depth(fmat)
 
   # get the allowed r values (for calculating the dCDF)
   rvals = unique(sort(fmat_depth))
