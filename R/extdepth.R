@@ -36,7 +36,7 @@ rank_depth = function(fmat) {
 
   rdepth = matrix(0, obs, fns)
   for (i in 1:obs) {
-    rdepth[i,] = rank(fmat[i,]) / fns
+    rdepth[i,] = (rank(fmat[i,])-1) / fns
   }
   return(1 - rdepth)
 }
