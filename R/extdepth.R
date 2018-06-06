@@ -24,7 +24,7 @@ edepth = function(g, fmat, depth_function = "standard") {
   # get the allowed r values (for calculating the dCDF)
   rvals = sort(unique(c(g_depth, fmat_depth)))
 
-  partial_ed = rep(0, fns)
+  partial_ed = rep(1, fns)
   for (f in 1:fns) {
     for (r in rvals) {
       dg = sum(g_depth <= r)
@@ -63,25 +63,23 @@ edepth_set = function(fmat, depth_function = "standard") {
 
   # only need to fill in the top triangle
   # invert later to get full partial_eds
-  partial_ed_upper = matrix(0, fns, fns)
+  partial_ed = matrix(1, fns, fns)
+
   for (f1 in 1:(fns-1)) {
     for (f2 in (f1+1):fns) {
       for (r in rvals) {
         d1 = sum(fmat_depth[,f1] <= r)
         d2 = sum(fmat_depth[,f2] <= r)
         if(d1 != d2) {
-          partial_ed_upper[f1, f2] = (d2 > d1)
+          partial_ed[f1, f2] = (d2 > d1)
+          partial_ed[f2, f1] = (d2 < d1)
           break;
         }
       }
     }
   }
 
-  # tranpose and invert the top triangle
-  partial_ed_lower = abs(1 - t(partial_ed_upper))*lower.tri(partial_ed_upper)
-  partial_ed = partial_ed_lower + partial_ed_upper + diag(1, fns, fns)
   ed = rowMeans(partial_ed)
-
   return(ed)
 }
 

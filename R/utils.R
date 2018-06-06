@@ -14,6 +14,7 @@ depth <- function(g, fmat) {
 }
 
 # compute the pointwise depth, with respect to fmat, for each function in fmat
+#' @export
 depth_set <- function(fmat) {
   # save the dimensions for convenience
   obs = nrow(fmat)

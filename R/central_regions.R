@@ -7,7 +7,7 @@
 #' to the first function etc.
 #' @param alpha Numeric. Default is 0.05.
 #'
-#' @return A vector of extremal depth values that correspond to the functions in fmat.
+#' @return A list containing the upper and lower bound as separate vectors.
 #' @export
 central_region <- function(fmat, edepths, alpha = 0.05) {
   # Takes a list of extremal depths and an alpha level and returns the functions corresponding to
