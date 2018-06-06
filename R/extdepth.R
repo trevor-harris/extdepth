@@ -1,47 +1,12 @@
-#' @export
-depth <- function(g, fmat) {
 
-  # Computes the depth values of a function with respect to a set of functions (fmat)
-  fn = ncol(fmat)
-  depth = rep(0, length(g))
-
-  for (row in 1:nrow(fmat)) {
-    diff = abs(sum(sign(g[row] - fmat[row,])))
-    depth[row] = 1 - (diff / fn)
-  }
-
-  return(depth)
-}
-
-#' @export
-depth_set <- function(fmat) {
-  # save the dimensions for convenience
-  obs = nrow(fmat)
-  fns = ncol(fmat)
-
-  # find the depths of each f in fmat
-  fmat_depth = matrix(0, obs, fns)
-  for (j in 1:fns) {
-    fmat_depth[,j] = depth(fmat[,j], fmat)
-  }
-  return(fmat_depth)
-}
-
-#' @export
-rank_depth = function(fmat) {
-  # technically not a depth
-  # At each time t, order the function observations from least to greatest
-  obs = nrow(fmat)
-  fns = ncol(fmat)
-
-  rdepth = matrix(0, obs, fns)
-  for (i in 1:obs) {
-    rdepth[i,] = (rank(fmat[i,])-1) / fns
-  }
-  return(1 - rdepth)
-}
-
-
+#' Compute the extremal depth of a function \code{g} with respect to a set of functions \code{fmat}
+#'
+#' @param g Vector. Function that you want to find the extremal depth of.
+#' @param fmat Matrix of functions. Each column is a function.
+#' @param depth_function either "standard" (default) or "rank". Standard orders functions from the center
+#'  outward and rank orders least to greatest.
+#'
+#' @return The extremal depth value as a real number.
 #' @export
 edepth = function(g, fmat, depth_function = "standard") {
 
@@ -75,46 +40,13 @@ edepth = function(g, fmat, depth_function = "standard") {
 }
 
 
-#' @export
-edepth_multi_fast = function(gmat, sorted_fmat, fdepths) {
-
-  # shorten name
-  fmat = sorted_fmat
-
-  # save the dimensions for convenience
-  g.obs = nrow(gmat)
-  g.fns = ncol(gmat)
-
-  f.obs = nrow(fmat)
-  f.fns = ncol(fmat)
-
-  # find the depths of each f in fmat
-  fmat_depth = fdepths
-
-  # find the depths of each g in gmat
-  gmat_depth = depth_set(gmat)
-
-  # get the allowed r values (for calculating the dCDF)
-  rvals = unique(sort(c(gmat_depth, fmat_depth)))
-
-  partial_ed = matrix(0, g.fns, f.fns)
-  for (g in 1:g.fns) {
-    for (f in 1:f.fns) {
-      for (r in rvals) {
-        d1 = sum(gmat_depth[,g] <= r)
-        d2 = sum(fmat_depth[,f] <= r)
-        if(d1 != d2) {
-          partial_ed[g, f] = (d2 > d1)
-          break;
-        }
-      }
-      if (partial_ed[g, f]==0) break;
-    }
-  }
-  return(rowSums(partial_ed) / f.fns)
-}
-
-
+#' Compute the extremal depths for all functions in \code{fmat}, with respect to \code{fmat}
+#'
+#' @param fmat Matrix of functions. Each column is a function.
+#' @param depth_function either "standard" (default) or "rank". Standard orders functions from the center
+#'  outward and rank orders least to greatest.
+#'
+#' @return A vector of extremal depth values that correspond to the functions in fmat.
 #' @export
 edepth_set = function(fmat, depth_function = "standard") {
 
@@ -153,3 +85,56 @@ edepth_set = function(fmat, depth_function = "standard") {
   return(ed)
 }
 
+#' Compute the extremal depths for all functions in \code{fmat}, with respect to \code{fmat}, then orders them from least to
+#' greatest extremal depth value.
+#'
+#' @param fmat Matrix of functions. Each column is a function.
+#' @param depth_function either "standard" (default) or "rank". Standard orders functions from the center
+#'  outward and rank orders least to greatest.
+#'
+#' @return A vector of extremal depth values that correspond to the functions in fmat.
+#' @export
+edepth_sort = function(fmat, depth_function = "standard") {
+  ed.set = edepth_set(fmat, depth_function)
+  ranks = match(sort(ed.set, decreasing = F), ed.set)
+  return(fmat[,ranks])
+}
+
+
+edepth_multi = function(gmat, sorted_fmat, fdepths) {
+
+  # shorten name
+  fmat = sorted_fmat
+
+  # save the dimensions for convenience
+  g.obs = nrow(gmat)
+  g.fns = ncol(gmat)
+
+  f.obs = nrow(fmat)
+  f.fns = ncol(fmat)
+
+  # find the depths of each f in fmat
+  fmat_depth = fdepths
+
+  # find the depths of each g in gmat
+  gmat_depth = depth_set(gmat)
+
+  # get the allowed r values (for calculating the dCDF)
+  rvals = unique(sort(c(gmat_depth, fmat_depth)))
+
+  partial_ed = matrix(0, g.fns, f.fns)
+  for (g in 1:g.fns) {
+    for (f in 1:f.fns) {
+      for (r in rvals) {
+        d1 = sum(gmat_depth[,g] <= r)
+        d2 = sum(fmat_depth[,f] <= r)
+        if(d1 != d2) {
+          partial_ed[g, f] = (d2 > d1)
+          break;
+        }
+      }
+      if (partial_ed[g, f]==0) break;
+    }
+  }
+  return(rowSums(partial_ed) / f.fns)
+}
