@@ -7,6 +7,9 @@
 #'  outward and rank orders least to greatest.
 #'
 #' @return The extremal depth value as a real number.
+#'
+#' @note \code{g} and \code{fmat} should have the same number of observations for each function. Furthermore
+#' functions should be sampled at the same time points.
 #' @export
 edepth = function(g, fmat, depth_function = "standard") {
 

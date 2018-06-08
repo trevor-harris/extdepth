@@ -15,7 +15,7 @@ to the first function etc.}
 \item{alpha}{Numeric. Default is 0.05.}
 }
 \value{
-A vector of extremal depth values that correspond to the functions in fmat.
+A list containing the upper and lower bound as separate vectors.
 }
 \description{
 Find the upper and lower bound for the \code{1-alpha} central region for a set of functions \code{fmat}
