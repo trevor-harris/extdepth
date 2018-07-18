@@ -42,6 +42,17 @@ rank_depth = function(fmat) {
   return(1 - rdepth)
 }
 
+ed_compare = function(f, m, depths, rvals) {
+  for (r in rvals) {
+    df = sum(depths[,f] <= r)
+    dm = sum(depths[,m] <= r)
+    if(df != dm) {
+      if((df > dm)) return(FALSE)
+      else return(TRUE)
+    }
+  }
+}
+
 # quickly sort depths
 func_quickSort <- function(depths, arr, rvals) {
   # Pick a number at random.
