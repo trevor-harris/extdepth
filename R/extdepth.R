@@ -72,40 +72,40 @@ edepth_sort = function(fmat, depth_function = "standard") {
 }
 
 
-#' edepth_set = function(fmat, depth_function = "standard") {
-#'
-#'   # save the dimensions for convenience
-#'   obs = nrow(fmat)
-#'   fns = ncol(fmat)
-#'
-#'   # find the depths of each f in fmat
-#'   if (depth_function == "standard") fmat_depth = depth_set(fmat)
-#'   if (depth_function == "rank") fmat_depth = rank_depth(fmat)
-#'
-#'   # get the allowed r values (for calculating the dCDF)
-#'   rvals = unique(sort(fmat_depth))
-#'
-#'   # only need to fill in the top triangle
-#'   # invert later to get full partial_eds
-#'   partial_ed = matrix(1, fns, fns)
-#'
-#'   for (f1 in 1:(fns-1)) {
-#'     for (f2 in (f1+1):fns) {
-#'       for (r in rvals) {
-#'         d1 = sum(fmat_depth[,f1] <= r)
-#'         d2 = sum(fmat_depth[,f2] <= r)
-#'         if(d1 != d2) {
-#'           partial_ed[f1, f2] = (d2 > d1)
-#'           partial_ed[f2, f1] = (d2 < d1)
-#'           break;
-#'         }
-#'       }
-#'     }
-#'   }
-#'
-#'   ed = rowMeans(partial_ed)
-#'   return(ed)
-#' }
+# edepth_set = function(fmat, depth_function = "standard") {
+#
+#   # save the dimensions for convenience
+#   obs = nrow(fmat)
+#   fns = ncol(fmat)
+#
+#   # find the depths of each f in fmat
+#   if (depth_function == "standard") fmat_depth = depth_set(fmat)
+#   if (depth_function == "rank") fmat_depth = rank_depth(fmat)
+#
+#   # get the allowed r values (for calculating the dCDF)
+#   rvals = unique(sort(fmat_depth))
+#
+#   # only need to fill in the top triangle
+#   # invert later to get full partial_eds
+#   partial_ed = matrix(1, fns, fns)
+#
+#   for (f1 in 1:(fns-1)) {
+#     for (f2 in (f1+1):fns) {
+#       for (r in rvals) {
+#         d1 = sum(fmat_depth[,f1] <= r)
+#         d2 = sum(fmat_depth[,f2] <= r)
+#         if(d1 != d2) {
+#           partial_ed[f1, f2] = (d2 > d1)
+#           partial_ed[f2, f1] = (d2 < d1)
+#           break;
+#         }
+#       }
+#     }
+#   }
+#
+#   ed = rowMeans(partial_ed)
+#   return(ed)
+# }
 
 # edepth_multi = function(gmat, sorted_fmat, fdepths) {
 #
