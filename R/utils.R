@@ -42,3 +42,34 @@ rank_depth = function(fmat) {
   return(1 - rdepth)
 }
 
+# quickly sort depths
+func_quickSort <- function(depths, arr, rvals) {
+  # Pick a number at random.
+  mid <- sample(arr, 1)
+
+  # Place-holders for left and right values.
+  left <- c()
+  right <- c()
+
+  # Move all the smaller values to the left, bigger values to the right.
+  lapply(arr[arr != mid], function(d) {
+    if (ed_compare(d, mid, depths, rvals)) {
+      left <<- c(left, d)
+    }
+    else {
+      right <<- c(right, d)
+    }
+  })
+
+  if (length(left) > 1) {
+    left <- func_quickSort(depths, left, rvals)
+  }
+
+  if (length(right) > 1) {
+    right <- func_quickSort(depths, right, rvals)
+  }
+
+  # Finally, return the sorted values.
+  c(left, mid, right)
+}
+
