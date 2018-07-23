@@ -52,8 +52,9 @@ edepth_set = function(fmat) {
   depths = depth_set(fmat)
   arr = 1:ncol(depths)
   rvals = unique(sort(depths))
+  ed = order(func_quickSort(depths, arr, rvals)) / ncol(fmat)
 
-  return(order(func_quickSort(depths, arr, rvals)) / ncol(fmat))
+  return(1-ed)
 }
 
 #' Compute the extremal depths for all functions in \code{fmat}, with respect to \code{fmat}, then orders them from least to
