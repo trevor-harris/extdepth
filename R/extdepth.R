@@ -45,11 +45,16 @@ edepth = function(g, fmat, depth_function = "standard") {
 #' Compute the extremal depths for all functions in \code{fmat}, with respect to \code{fmat}
 #'
 #' @param fmat Matrix of functions. Each column is a function.
+#' @param depth_function either "standard" (default) or "rank". Standard orders functions from the center
+#'  outward and rank orders least to greatest.
 #'
 #' @return A vector of extremal depth values that correspond to the functions in fmat.
 #' @export
-edepth_set = function(fmat) {
-  depths = depth_set(fmat)
+edepth_set = function(fmat, depth_function = "standard") {
+  # find the depths of each f in fmat
+  if (depth_function == "standard") depths = depth_set(fmat)
+  if (depth_function == "rank") depths = rank_depth(fmat)
+
   arr = 1:ncol(depths)
   rvals = unique(sort(depths))
   ed = order(func_quickSort(depths, arr, rvals)) / ncol(fmat)
