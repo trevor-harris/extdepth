@@ -47,7 +47,7 @@ ed_compare = function(f, m, depths, rvals) {
     df = sum(depths[,f] <= r)
     dm = sum(depths[,m] <= r)
     if(df != dm) {
-      if((df > dm)) return(FALSE)
+      if((df < dm)) return(FALSE)
       else return(TRUE)
     }
   }
@@ -80,7 +80,7 @@ func_quickSort <- function(depths, arr, rvals) {
     right <- func_quickSort(depths, right, rvals)
   }
 
-  # Finally, return the sorted values.
+  # Finally, return the depth sorted function indicies
   c(left, mid, right)
 }
 
